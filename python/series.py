@@ -6,6 +6,7 @@ Usage:
 -e: use -e name_of_show [num] to add num to episodes or ommit num to add 1
 -s: use -s name_of_show [num] to add num to seasons or ommit num to add 1
 -d: use -d name_of_show to delete the show
+-f: use -f search_string to display shows that match the search string
 help: Prints this help text
 
 Note that changing the season sets the episode to 1
@@ -31,6 +32,8 @@ def main():
     shows = []
     if os.path.isfile(SAVE_FILE):
         shows = read_series()
+
+    # TODO: Restructure to remove redundancy of checking number of arguments
 
     # Print all the shows if no arguments are passed
     if len(sys.argv) == 1:
@@ -66,12 +69,26 @@ def main():
         update_series(show, sys.argv[1], 1 if len(sys.argv) == 3 else int(sys.argv[3]))
 
     if sys.argv[1] == "-d":
+        if len(sys.argv) < 3:
+            print("You have to provide the name of the series as a second argument")
+            sys.exit()
+
         show = filter_shows(shows, sys.argv[2])
         if show is None:
             print("This show does not exist")
             sys.exit()
 
         shows.remove(show)
+
+    if sys.argv[1] == "-f":
+        # If there is no series name or it is empty do not create a series
+        if len(sys.argv) < 3:
+            print("You have to provide the name of the series as a second argument")
+            sys.exit()
+        
+        # TODO: Split up filter method and use it here
+        print_series(list(filter(lambda x: sys.argv[2] in x.name.lower(), shows)))
+        sys.exit()
 
     write_series(shows)
     print_series(shows)
@@ -117,6 +134,7 @@ def print_help():
            "-e: use -e name_of_show [num] to add num to episodes or ommit num to add 1\n"
            "-s: use -s name_of_show [num] to add num to seasons or ommit num to add 1\n"
            "-d: use -d name_of_show to delete the show\n"
+           "-f: use -f search_string to display shows that match the search string\n"
            "help: Prints this help text\n"
            "\n"
            "Note that changing the season sets the episode to 1\n"))
