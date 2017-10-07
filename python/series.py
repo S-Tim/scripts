@@ -59,7 +59,8 @@ def main():
             print("You have to provide the name of the series as a second argument")
             sys.exit()
 
-        show = filter_shows(shows, sys.argv[2])
+        filtered_shows = filter_shows(shows, sys.argv[2])
+        show = select_show(filtered_shows)
 
         if show is None:
             print("This show does not exist")
@@ -73,7 +74,9 @@ def main():
             print("You have to provide the name of the series as a second argument")
             sys.exit()
 
-        show = filter_shows(shows, sys.argv[2])
+        filtered_shows = filter_shows(shows, sys.argv[2])
+        show = select_show(filtered_shows)
+
         if show is None:
             print("This show does not exist")
             sys.exit()
@@ -85,9 +88,8 @@ def main():
         if len(sys.argv) < 3:
             print("You have to provide the name of the series as a second argument")
             sys.exit()
-        
-        # TODO: Split up filter method and use it here
-        print_series(list(filter(lambda x: sys.argv[2] in x.name.lower(), shows)))
+
+        print_series(filter_shows(shows, sys.argv[2]))
         sys.exit()
 
     write_series(shows)
@@ -148,28 +150,28 @@ def update_series(series, command, amount):
         series.episode = 1
 
 def filter_shows(shows, search_string):
-    """
-    Filters the list of shows by a search string and makes
-    the user choose one if there are multiple options
-    """
+    """ Filters the list of shows by a search string """
 
     # Get all the shows that contain the search string in their name
     # This search is not case-sensitive
-    filtered_shows = list(filter(lambda x: search_string.lower() in x.name.lower(), shows))
+    return list(filter(lambda x: search_string.lower() in x.name.lower(), shows))
 
-    if len(filtered_shows) == 0:
+
+def select_show(shows):
+    """ Gets a list of shows and makes the user choose one """
+    if len(shows) == 0:
         return None
-    if len(filtered_shows) == 1:
+    if len(shows) == 1:
         # If there is only one show that matches the search string return it immediately
-        return filtered_shows[0]
+        return shows[0]
     else:
         # Otherwise the user has to choose one of the options
         print("Choose a show:")
-        for index, item in enumerate(filtered_shows):
+        for index, item in enumerate(shows):
             print("({}) {}".format(index + 1, item.name))
 
         # Read the users input
-        user_input = input("\nYour choice (1 - {}): ".format(len(filtered_shows)))
+        user_input = input("\nYour choice (1 - {}): ".format(len(shows)))
         print()
 
         if not is_number(user_input):
@@ -177,11 +179,10 @@ def filter_shows(shows, search_string):
             sys.exit()
 
         index = int(user_input) - 1
-        if index >= 0 and index < len(filtered_shows):
-            return filtered_shows[index]
-
-        print("Invalid input")
-        sys.exit()
+        if index >= 0 and index < len(shows):
+            return shows[index]
+     
+        return None
 
 def is_number(num):
     """ Checks if num can be cast to an int """
