@@ -17,9 +17,11 @@ Author: Tim Silhan
 import sys
 import json
 import os.path
+from pathlib import Path
 
 # Save file where all the series data will be saved
 SAVE_FILE = "series_data.json"
+SAVE_FILE = str(Path.joinpath(Path.home(), SAVE_FILE))
 
 def main():
     """ Main logic of the script packed in main for readability """
