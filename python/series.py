@@ -3,8 +3,8 @@
 Tracks your progress on any series!
 Usage:
 -a: use -a name_of_show to add a new show
--e: use -e name_of_show [num] to add num to episodes or ommit num to add 1
--s: use -s name_of_show [num] to add num to seasons or ommit num to add 1
+-e: use -e name_of_show [num] to set episodes to num or ommit num to add 1
+-s: use -s name_of_show [num] to set seasons to num or ommit num to add 1
 -d: use -d name_of_show to delete the show
 -f: use -f search_string to display shows that match the search string
 help: Prints this help text
@@ -69,7 +69,10 @@ def main():
             sys.exit()
 
         # Update the episode or season of the show
-        update_series(show, sys.argv[1], 1 if len(sys.argv) == 3 else int(sys.argv[3]))
+        current_value = show.episode if sys.argv[1] == "-e" else show.season
+
+        update_series(show, sys.argv[1],
+                      current_value + 1 if len(sys.argv) == 3 else int(sys.argv[3]))
 
     if sys.argv[1] == "-d":
         if len(sys.argv) < 3:
@@ -135,8 +138,8 @@ def print_help():
     print(("Tracks your progress on any series!\n"
            "Usage:\n"
            "-a: use -a name_of_show to add a new show\n"
-           "-e: use -e name_of_show [num] to add num to episodes or ommit num to add 1\n"
-           "-s: use -s name_of_show [num] to add num to seasons or ommit num to add 1\n"
+           "-e: use -e name_of_show [num] to set episodes to num or ommit num to add 1\n"
+           "-s: use -s name_of_show [num] to set seasons to num or ommit num to add 1\n"
            "-d: use -d name_of_show to delete the show\n"
            "-f: use -f search_string to display shows that match the search string\n"
            "help: Prints this help text\n"
@@ -146,9 +149,9 @@ def print_help():
 def update_series(series, command, amount):
     """ Updates a series """
     if command == "-e":
-        series.episode += amount
+        series.episode = amount
     elif command == "-s":
-        series.season += amount
+        series.season = amount
         series.episode = 1
 
 def filter_shows(shows, search_string):
