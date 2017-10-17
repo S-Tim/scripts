@@ -128,7 +128,8 @@ def write_series(shows):
         json.dump([ob.__dict__ for ob in shows], outfile)
 
 def print_series(shows):
-    """ Prints all the shows """
+    """ Prints all the shows in alphabetical order """
+    shows.sort(key=lambda show: show.name)
     for show in shows:
         print(show)
 
