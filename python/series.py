@@ -132,8 +132,8 @@ def print_series(shows):
     """ Prints all the shows in alphabetical order """
     shows.sort(key=lambda show: show.name)
 
-    print_list = [[show.name, show.episode, show.season] for show in shows]
-    print(tabulate(print_list, headers=["Title", "Episode", "Season"]))
+    print_list = [[show.name, show.season, show.episode] for show in shows]
+    print(tabulate(print_list, headers=["Title", "Season", "Episode"]))
 
 def print_help():
     """ Prints information regarding the usage of this script """
