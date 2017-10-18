@@ -18,6 +18,7 @@ import sys
 import json
 import os.path
 from pathlib import Path
+from tabulate import tabulate
 
 # Save file where all the series data will be saved
 SAVE_FILE = "series_data.json"
@@ -130,8 +131,9 @@ def write_series(shows):
 def print_series(shows):
     """ Prints all the shows in alphabetical order """
     shows.sort(key=lambda show: show.name)
-    for show in shows:
-        print(show)
+
+    print_list = [[show.name, show.episode, show.season] for show in shows]
+    print(tabulate(print_list, headers=["Title", "Episode", "Season"]))
 
 def print_help():
     """ Prints information regarding the usage of this script """
