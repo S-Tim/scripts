@@ -132,8 +132,16 @@ def print_series(shows):
     """ Prints all the shows in alphabetical order """
     shows.sort(key=lambda show: show.name)
 
-    print_list = [[show.name, show.season, show.episode] for show in shows]
-    print(tabulate(print_list, headers=["Title", "Season", "Episode"]))
+    max_length = max([len(show.name) for show in shows])
+    min_length = 10
+
+    length = max(max_length, min_length) + 1
+
+    print(f"{'Title':<{length}} {'Season':>8} {'Episode':>9}")
+    print(("-" * length) + " " + ("-" * 8) + " " + ("-" * 9))
+
+    for show in shows:
+        print(f"{show.name:<{length}} {show.season:>8} {show.episode:>9}")
 
 def print_help():
     """ Prints information regarding the usage of this script """
