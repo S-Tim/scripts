@@ -18,7 +18,6 @@ import sys
 import json
 import os.path
 from pathlib import Path
-from tabulate import tabulate
 
 # Save file where all the series data will be saved
 SAVE_FILE = "series_data.json"
@@ -132,7 +131,10 @@ def print_series(shows):
     """ Prints all the shows in alphabetical order """
     shows.sort(key=lambda show: show.name)
 
-    max_length = max([len(show.name) for show in shows])
+    max_length = 0
+
+    if len(shows) > 0:
+        max_length = max([len(show.name) for show in shows])
     min_length = 10
 
     length = max(max_length, min_length) + 1
