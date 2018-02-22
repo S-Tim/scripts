@@ -25,6 +25,7 @@ set incsearch " search as characters are enteres
 set tabstop=4 " visual
 set softtabstop=4 " edit
 set expandtab " tabs are spaces
+set shiftwidth=4 " used for < and >
 
 " UI
 set number
