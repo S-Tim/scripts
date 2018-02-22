@@ -1,0 +1,39 @@
+set nocompatible " Disable vi support
+
+" Enable pathogen
+execute pathogen#infect()
+
+" File type options
+syntax on " Syntax highlighting
+filetype plugin indent on " Filetype auto detection
+set autoindent " Match indent on new line
+set smartindent " Intelligently dedent / indent based on rules
+
+" Disable backups
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Searching
+set ignorecase " case insensitive search
+set smartcase " if there are uppercase letters, become case sensitive
+set hlsearch " highlight matches
+set gdefault " Automatically use the g flag
+set incsearch " search as characters are enteres
+
+" Tabs
+set tabstop=4 " visual
+set softtabstop=4 " edit
+set expandtab " tabs are spaces
+
+" UI
+set number
+set showcmd
+set showmatch
+
+" Movement, move visually when a line gets wrapped
+nnoremap j gj
+nnoremap k gk
+inoremap jk <esc>
+
+colorscheme molokai
