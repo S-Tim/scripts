@@ -1,0 +1,12 @@
+[submodule "configs/.vim/bundle/vim-commentary"]
+	path = configs/.vim/bundle/vim-commentary
+	url = git://github.com/tpope/vim-commentary.git
+[submodule "configs/.vim/bundle/vim-colorschemes"]
+	path = configs/.vim/bundle/vim-colorschemes
+	url = https://github.com/flazz/vim-colorschemes.git
+[submodule "configs/.vim/bundle/vim-surround"]
+	path = configs/.vim/bundle/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "configs/.vim/bundle/nerdtree"]
+	path = configs/.vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
