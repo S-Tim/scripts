@@ -32,6 +32,6 @@ print('Compressed:', compressed)
 print('Dir:', digest[:2])
 print('File:', digest[2:])
 
-# run_command(f'mkdir -p .git/objects/{digest[:2]}')
-# with open(f'.git/objects/{digest[:2]}/{digest[2:]}', 'wb') as blob:
-#     blob.write(compressed)
+run_command(f'mkdir -p .git/objects/{digest[:2]}')
+with open(f'.git/objects/{digest[:2]}/{digest[2:]}', 'wb') as blob:
+    blob.write(compressed)
