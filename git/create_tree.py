@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+# Creates a git tree object from the given hash and filename
+# The format of a tree object is:
+#   tree [content size]\u0000[Entries having references to other trees and blobs]
+# With each entry having the format:
+#   [mode] [file/directory name]\u0000[SHA-1 of referenced blob or tree (as bytes)]
+# Reference: https://stackoverflow.com/questions/14790681/what-is-the-internal-format-of-a-git-tree-object
+#
+# Author: Tim Silhan
+
 import sys
 import zlib
 from hashlib import sha1
@@ -16,6 +25,8 @@ if len(sys.argv) > 2:
 print('Ref Hash: ', ref_hash)
 
 content = b"100644 " + filename.encode('utf-8') + b"\x00" + bytes.fromhex(ref_hash)
+# Create a directory with a tree object
+# content = b"40000 " + filename.encode('utf-8') + b"\x00" + bytes.fromhex(ref_hash)
 
 header = f'tree {len(content)}\u0000'
 print('Header:', header)
@@ -25,12 +36,11 @@ print('Store:', store)
 
 digest = sha1(store).hexdigest()
 print('Digest:', digest)
+print('Dir:', digest[:2])
+print('File:', digest[2:])
 
 compressed = zlib.compress(store)
 print('Compressed:', compressed)
-
-print('Dir:', digest[:2])
-print('File:', digest[2:])
 
 run_command(f'mkdir -p .git/objects/{digest[:2]}')
 with open(f'.git/objects/{digest[:2]}/{digest[2:]}', 'wb') as blob:
