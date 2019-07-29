@@ -5,27 +5,35 @@ from aiohttp import ClientSession
 import time
 
 async def fetch_head(url, session):
-    async with session.head(url) as response:
-        return (url, response.status)
+    try:
+        async with session.head(url) as response:
+            return (url, response.status)
+    except:
+        print("URL:", url, "not reachable")
 
 async def fetch(url, session):
-    async with session.get(url) as response:
-        return (url, response.status)
+    try:
+        async with session.get(url) as response:
+            return (url, response.status)
+    except:
+        print("URL:", url, "not reachable")
 
 async def run(urls):
     tasks = []
 
     async with ClientSession() as session:
         for url in urls:
-            tasks.append(fetch_head(url, session))
+            tasks.append(fetch(url, session))
 
         responses = await asyncio.gather(*tasks)
+        responses = [resp for resp in responses if resp is not None]
 
         for url, status in responses:
             print("URL:", url, "Status:", status)
 
 
-urls = ["http://www.google.com"] * 50
+urls = ["http://www.googlesdfkasdfljsdflkjssss.com"] * 5
+urls += ["http://www.google.com"] * 5
 
 start_time = time.time()
 loop = asyncio.get_event_loop()
