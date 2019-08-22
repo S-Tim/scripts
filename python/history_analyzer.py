@@ -28,7 +28,7 @@ def read_history(shell_name):
     elif shell_name == "zsh":
         hist_path += "/.zsh_history"
 
-    with open(hist_path) as history:
+    with open(hist_path, encoding="ISO-8859-1") as history:
         return format_history(shell_name, history.readlines())
 
 
