@@ -1,0 +1,15 @@
+Die Verfasser des Berichts stellten fast alle Algorithmen unter einen
+Generalverdacht, moniert der Verband. Die allerwenigsten davon wUerden aber
+das Risiko von Diskriminierung oder Gefahr fUer Leib und Leben bergen. Die
+geforderte Risikobewertung fUer jede einzelne der teils laengst alltaeglichen
+Programmroutinen sei nicht nur nicht notwendig, sondern angesichts der FUelle
+an Anwendungen auch in der Praxis Ueberhaupt nicht durchfUehrbar. Der Bitkom
+hat parallel die den Leitfaden Blick in die Blackbox veroeffentlicht, um
+Algorithmen fUer KUenstliche Intelligenz (KI) in der Praxis nachvollziehbarer
+zu machen. Mit einigen Forderungen ist die Kommission deutlich Uebers Ziel
+hinausgeschossen, haut der eco-Verband der Internetwirtschaft in die gleiche
+Kerbe. Regulierungsphantasien wie eine neue allgemeine europaeische
+Algorithmen-Verordnung (EUVAS) koennten dem eco zufolge zur echten
+Digitalisierungsbremse werden. Bei der ins Spiel gebrachten Pflicht zur
+Interoperabilitaet fUer Messenger und soziale Netzwerke mUesse hinterfragt
+werden, inwieweit dadurch die Souveraenitaet von Nutzern eingeschraenkt werde.
