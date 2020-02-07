@@ -1,17 +1,18 @@
 # Calculates the intereset paid per year with daily accuracy and the actual
 # number of days per year (act/act).
-# 
+#
 # Each transaction is a tuple of an ISO timestamp with a maximum of precision
-# of microseconds and and the value of the transaction.
+# of microseconds and the value of the transaction.
 # For example (2015-01-01 10:12:13.456789+01:00, 123.45)
-# 
+#
 # The transactions all have to be in the same year. Additional paramaters are
 # the initial balance and the interest per year. For negative balances the same
 # interest rate as for positive values is used.
 #
 # Author: Tim Silhan
 
-from datetime import date, datetime
+import random
+from datetime import date, datetime, timedelta
 
 
 def calculate_daily_totals(transactions):
@@ -31,11 +32,9 @@ def calculate_daily_totals(transactions):
         year=first_day_of_year.year+1)
 
     if first_day_of_year not in daily_totals:
-        daily_totals[first_day_of_year] = datetime(
-            first_day_of_year.year, first_day_of_year.month, first_day_of_year.day)
+        daily_totals[first_day_of_year] = 0
     if first_day_of_next_year not in daily_totals:
-        daily_totals[first_day_of_next_year] = datetime(
-            first_day_of_next_year.year, first_day_of_next_year.month, first_day_of_next_year.day)
+        daily_totals[first_day_of_next_year] = 0
 
     days_in_year = (first_day_of_next_year - first_day_of_year).days
 
@@ -56,19 +55,43 @@ def calculate_interest(daily_totals, days_in_year, interest_per_year, initial_ba
         delta = to_day - from_day
 
         interest = balance * interest_per_day * delta.days
-        balance += interest
         total_interest += interest
         print('Balance:', balance, 'Interest:', interest, 'Days:', delta.days)
 
-    return balance, total_interest
+    return round(balance + total_interest, 2), round(total_interest, 2)
+
+
+def generate_transactions(number_of_transactions):
+    year = random.randint(1990, 2020)
+    min_date = datetime(year=year, month=1, day=1)
+    max_date = datetime(year=year+1, month=1, day=1)
+    delta_seconds = (max_date - min_date).days * 24 * 60 * 60
+    transactions = []
+
+    for _ in range(number_of_transactions):
+        date = min_date + timedelta(seconds=random.randrange(delta_seconds))
+        amount = random.randint(-100, 1000) + round(random.random(), 2)
+
+        transactions.append((date.isoformat(), amount))
+
+    return transactions
 
 
 if __name__ == '__main__':
-    interest_per_year = 0.01
-    initial_balance = 1000
+    interest_per_year = 0.05
+    initial_balance = 1234
+    transactions = generate_transactions(10)
 
-    transactions = [('2015-01-01 10:12:13.456789', 123.45),
-                    ('2015-01-01 15:12:13.456789', 123.45), ('2015-02-07 18:00:00', 123.45)]
+    # transactions = [('2015-01-01 10:12:13.456789', 123.45),
+    #                 ('2015-01-01 15:12:13.456789', 123.45), ('2015-02-07 18:00:00', 123.45)]
+    # transactions = [('2016-01-01 10:12:13.456789', 100.00)]
+    # transactions = [('2016-01-01 10:12:13.456789', 100.00), ('2016-06-10 16:45:13.456789', 80.20)]
+    # transactions = [('2016-12-31 10:12:13.456789', 100.00)]
+    # transactions = [('2019-01-01 10:12:13.456789', 100.00), ('2019-01-01 10:12:13.456789', 0.00), ('2019-01-01 10:12:13.456789', 0.00), ('2019-01-01 10:12:13.456789', 0.00)]
+    # transactions = [('2019-04-20 10:12:13', 100.00), ('2019-10-11 16:45:00', 25.50)]
+    # transactions = [('2016-06-10 10:12:13', 100.00), ('2016-01-01 16:45:13', 80.20)]
+    # transactions = [('2010-03-20 16:32:40', 666.95), ('2010-06-29 20:37:54', 966.7), ('2010-01-14 12:36:14', 34.65), ('2010-12-06 22:33:57', -15.88), ('2010-08-14 02:31:47', 100.45),
+    #transactions = [('2019-01-01 10:12:13', 100.00), ('2019-03-05 10:12:13', 0.00), ('2019-06-08 10:12:13', 0.00), ('2019-11-01 10:12:13', 0.00)]
 
     print(f'Initial Balance: {initial_balance}\n')
 
