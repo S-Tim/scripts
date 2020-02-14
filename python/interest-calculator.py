@@ -15,48 +15,26 @@ import random
 from datetime import date, datetime, timedelta
 
 
-def calculate_daily_totals(transactions):
-    # Sum up transactions by day
-    daily_totals = {}
-    for date_string, value in transactions:
-        date = datetime.fromisoformat(date_string).date()
-        if date not in daily_totals.keys():
-            daily_totals[date] = value
-        else:
-            daily_totals[date] += value
+def calculate_interest(transactions, interest_per_year, balance):
+    parsed = [(datetime.fromisoformat(date_string).date(), amount)
+              for date_string, amount in transactions]
 
-    # Add first and last days of the calculation
-    first_day_of_year = datetime.fromisoformat(
-        transactions[0][0]).date().replace(month=1, day=1)
-    first_day_of_next_year = first_day_of_year.replace(
-        year=first_day_of_year.year+1)
+    first_day = parsed[0][0].replace(month=1, day=1)
+    parsed.append((first_day, 0))
+    parsed.append((first_day.replace(year=first_day.year+1), 0))
 
-    if first_day_of_year not in daily_totals:
-        daily_totals[first_day_of_year] = 0
-    if first_day_of_next_year not in daily_totals:
-        daily_totals[first_day_of_next_year] = 0
-
-    days_in_year = (first_day_of_next_year - first_day_of_year).days
-
-    return daily_totals, days_in_year
-
-
-def calculate_interest(daily_totals, days_in_year, interest_per_year, initial_balance):
-    transaction_days = sorted(list(daily_totals.keys()))
+    days_in_year = (parsed[-1][0] - parsed[-2][0]).days
     interest_per_day = interest_per_year / days_in_year
-    balance = initial_balance
     total_interest = 0
+    parsed = sorted(parsed)
 
-    for i in range(len(transaction_days) - 1):
-        from_day = transaction_days[i]
-        to_day = transaction_days[i+1]
-
-        balance += daily_totals[from_day]
-        delta = to_day - from_day
+    for i in range(len(parsed) - 1):
+        balance += parsed[i][1]
+        delta = parsed[i+1][0] - parsed[i][0]
 
         interest = balance * interest_per_day * delta.days
         total_interest += interest
-        print('Balance:', balance, 'Interest:', interest, 'Days:', delta.days)
+        print('Balance:', balance, 'Interest:', interest, 'Date:', parsed[i][0], 'Days:', delta.days)
 
     return round(balance + total_interest, 2), round(total_interest, 2)
 
@@ -72,14 +50,14 @@ def generate_transactions(number_of_transactions):
         date = min_date + timedelta(seconds=random.randrange(delta_seconds))
         amount = random.randint(-100, 1000) + round(random.random(), 2)
 
-        transactions.append((date.isoformat(), amount))
+        transactions.append((date.isoformat(sep=' '), amount))
 
     return transactions
 
 
 if __name__ == '__main__':
-    interest_per_year = 0.05
-    initial_balance = 1234
+    interest_per_year = round(random.uniform(0.0, 0.15), 3)
+    initial_balance = random.randint(50, 100000)
     transactions = generate_transactions(10)
 
     # transactions = [('2015-01-01 10:12:13.456789', 123.45),
@@ -95,9 +73,8 @@ if __name__ == '__main__':
 
     print(f'Initial Balance: {initial_balance}\n')
 
-    daily_totals, days_in_year = calculate_daily_totals(transactions)
     balance, interest = calculate_interest(
-        daily_totals, days_in_year, interest_per_year, initial_balance)
+        transactions, interest_per_year, initial_balance)
 
     print('\nFinal Balance:', balance)
     print('Total interest:', interest)
